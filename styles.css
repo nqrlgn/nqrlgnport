@@ -385,7 +385,16 @@ body::before, .page-glow { display: none; }
 }
 .brand-name { color: #f7f1e7; font: 700 11px var(--font-body); letter-spacing: 1px; }
 .brand-name span { color: #e7a58d; }
-.site-nav { gap: 28px; color: #f7f1e7; font: 600 12px var(--font-body); letter-spacing: 0; text-transform: none; }
+.site-nav {
+  flex: 1;
+  justify-content: space-between;
+  margin-left: clamp(24px, 7vw, 96px);
+  gap: 28px;
+  color: #f7f1e7;
+  font: 600 12px var(--font-body);
+  letter-spacing: 0;
+  text-transform: none;
+}
 .site-nav > a:not(.nav-contact):hover { color: #e7a58d; }
 .menu-toggle { border-color: rgba(247,241,231,.3); }
 .menu-toggle > span:not(.sr-only) { background: #f7f1e7; }
@@ -873,7 +882,7 @@ body::before, .page-glow { display: none; }
 }
 @media (max-width: 600px) {
   .site-header { column-gap: 4px; }
-  .site-nav { justify-content: space-between; gap: 4px; }
+  .site-nav { justify-content: space-between; margin-left: 0; gap: 4px; }
   .site-nav > .nav-contact { padding: 7px 8px; font-size: 10px; }
 }
 @media (max-width: 360px) {
