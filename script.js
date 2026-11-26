@@ -27,7 +27,7 @@ if (visitCountElement && visitStatusElement) {
   const updateTotalGameVisits = async () => {
     try {
       const response = await fetch(
-        `https://games.roblox.com/v1/games?universeIds=${trackedUniverseIds.join(",")}`,
+        `https://games.roproxy.com/v1/games?universeIds=${trackedUniverseIds.join(",")}`,
         { cache: "no-store" },
       );
       if (!response.ok) {
