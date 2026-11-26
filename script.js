@@ -13,6 +13,75 @@ if ("IntersectionObserver" in window && !prefersReducedMotion) {
   revealElements.forEach((element) => element.classList.add("is-visible"));
 }
 
+const hashSections = [
+  { element: document.querySelector("#home"), hash: "#home" },
+  { element: document.querySelector("#games"), hash: "#games" },
+  { element: document.querySelector("#current-games"), hash: "#games" },
+  { element: document.querySelector("#what-i-do"), hash: "#what-i-do" },
+  { element: document.querySelector("#approach"), hash: "#approach" },
+  { element: document.querySelector("#contact"), hash: "#contact" },
+].filter((section) => section.element);
+
+let hashUpdateQueued = false;
+let anchorNavigationPending = false;
+let anchorNavigationTimeout = 0;
+const finishAnchorNavigation = () => {
+  anchorNavigationPending = false;
+  window.clearTimeout(anchorNavigationTimeout);
+};
+
+document.addEventListener("click", (event) => {
+  const anchor = event.target instanceof Element
+    ? event.target.closest('a[href^="#"]')
+    : null;
+  if (!anchor) {
+    return;
+  }
+
+  anchorNavigationPending = true;
+  window.clearTimeout(anchorNavigationTimeout);
+  anchorNavigationTimeout = window.setTimeout(finishAnchorNavigation, 1500);
+});
+
+window.addEventListener("scrollend", finishAnchorNavigation);
+window.addEventListener("wheel", finishAnchorNavigation, { passive: true });
+window.addEventListener("touchmove", finishAnchorNavigation, { passive: true });
+
+const updateHashFromScroll = () => {
+  hashUpdateQueued = false;
+  if (anchorNavigationPending) {
+    return;
+  }
+
+  const markerPosition = window.scrollY + Math.min(window.innerHeight * 0.18, 140);
+  let activeHash = "#home";
+
+  hashSections.forEach((section) => {
+    const sectionTop = section.element.getBoundingClientRect().top + window.scrollY;
+    if (sectionTop <= markerPosition) {
+      activeHash = section.hash;
+    }
+  });
+
+  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 2) {
+    activeHash = "#contact";
+  }
+  if (window.location.hash !== activeHash) {
+    history.replaceState(null, "", activeHash);
+  }
+};
+
+const scheduleHashUpdate = () => {
+  if (!hashUpdateQueued && !anchorNavigationPending) {
+    hashUpdateQueued = true;
+    window.requestAnimationFrame(updateHashFromScroll);
+  }
+};
+
+window.addEventListener("scroll", scheduleHashUpdate, { passive: true });
+window.addEventListener("resize", scheduleHashUpdate);
+window.addEventListener("load", scheduleHashUpdate, { once: true });
+
 const visitCountElement = document.querySelector("#total-game-visits");
 const visitStatusElement = document.querySelector("#total-game-visits-status");
 const trackedUniverseIds = [
