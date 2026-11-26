@@ -10,15 +10,21 @@
     <meta name="theme-color" content="#f3eee4" />
     <link rel="canonical" href="https://nqrlgn.github.io/nqrlgnport/" />
     <title>Nqrport</title>
-    <script>
-      if (window.location.hash !== "#home") {
+<script>
+  history.scrollRestoration = "manual";
+  if (window.location.hash !== "#home") {
+    history.replaceState(null, "", "#home");
+  }
+  window.addEventListener(
+    "pageshow",
+    () => {
+      window.setTimeout(() => {
         history.replaceState(null, "", "#home");
-      }
-      window.addEventListener(
-        "load",
-        () => window.scrollTo({ top: 0, left: 0, behavior: "instant" }),
-        { once: true },
-      );
+        window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+      }, 0);
+    },
+    { once: true },
+  );
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
